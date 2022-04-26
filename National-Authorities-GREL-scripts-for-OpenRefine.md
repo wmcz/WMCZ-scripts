@@ -1,11 +1,11 @@
-<h2>GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files</h2>
+## GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files
 
 * Catmandu call = to extract information from MARC XML dumps
 * OpenRefine GREL code = to transform values for Wikidata
 
-<h3>Fields 100abq (Personal name) GREL</h3>
-<h4>GREL</h4>
-<code>
+### Fields 100abq (Personal name) GREL
+#### GREL
+```
   if(isNonBlank(cells['100q'].value),
 	cells['100q'].value.chomp(",").strip().replace("(","").replace(")","") + " " + cells['100a'].value.chomp(",").split(",").get(0).strip(),
 	if(cells['100a'].value.chomp(",").split(",").length() == 3,
@@ -20,26 +20,27 @@
 	" " + cells['100b'].value.strip().chomp(","),
 	""
 	)
-</code>
+```
 
-<h4>Catmandu</h4>
+#### Catmandu
 
-<code>catmandu convert MARC --type XML --fix data/100abq.fix to CSV --fields "_id,100a,100b,100q" < data/aut.xml > data/output.csv</code>
+`catmandu convert MARC --type XML --fix data/100abq.fix to CSV --fields "_id,100a,100b,100q" < data/aut.xml > data/output.csv`
 
 fix:
-<code>
+```
 do marc_each()
   marc_map(100a,100a)
   marc_map(100b,100b)
   marc_map(100q,100q)
 end
-</code>
+```
   
-<h3>100d,046f,678a (Date of birth)</h3>
+### 100d,046f,678a (Date of birth)
   
-<h4>GREL</h4>
+###GREL
 
-<code>with(
+```
+with(
 [if (cells['046f'].value.length() == 8,
 	cells['046f'].value.splitByLengths(4,2,2).join("-"),
 	if (cells['046f'].value.length() == 6,
@@ -84,15 +85,15 @@ replace("prosince","12.").replace("prosinec","12.").
 replace(/^([0-9]{3,4} )/,"$1-").replace(" ","").replace(/\.$/,"").replace(".","-").
 replace(/^([0-9]{3}\-)/,"0$1").replace(/\-([0-9]\-)/,"\-0$1").replace(/\-([0-9]$)/,"\-0$1")
 ].
-join(",").split(','), a, filter(a, v, v.length() == forEach(a, x, x.length()).sort()[-1]))[0]</code>
+join(",").split(','), a, filter(a, v, v.length() == forEach(a, x, x.length()).sort()[-1]))[0]
+```
 
-<h4>Catmandu</h4>
+#### Catmandu
 
-<code>catmandu convert MARC --type XML --fix data/100d,046fg,678a.fix to CSV --fields "_id,100d,046f,046g,678a" < data/aut.xml > data/output.csv
-</code>
+`catmandu convert MARC --type XML --fix data/100d,046fg,678a.fix to CSV --fields "_id,100d,046f,046g,678a" < data/aut.xml > data/output.csv`
 
 fix:
-<code>
+```
 do marc_each()
   marc_map(100d,100d)
   marc_map(046f,046f)
@@ -100,5 +101,4 @@ do marc_each()
   marc_map(678a,678a.$append)
 end
 join_field(678a,'|')
-</code>
-
+```
