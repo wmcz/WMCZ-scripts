@@ -3,7 +3,7 @@
 * Catmandu call = to extract information from MARC XML dumps
 * OpenRefine GREL code = to transform values for Wikidata
 
-### Fields 100abq (Personal name) GREL
+### 100abq (Personal name)
 #### GREL
 ```
   if(isNonBlank(cells['100q'].value),
@@ -37,7 +37,7 @@ end
   
 ### 100d,046f,678a (Date of birth)
   
-### GREL
+#### GREL
 
 ```
 with(
