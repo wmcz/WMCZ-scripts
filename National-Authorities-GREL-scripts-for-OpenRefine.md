@@ -69,7 +69,7 @@ replace(/^([1-9]\.)/,"0$1").replace(/\.([1-9]\.)/,"\.0$1").replace(/\.([0-9]{3}$
 match(/(^[0-9]{2}\.[0-9]{2}\.[0-9]{3,4}$|^[0-9]{3,4}$|^[0-9]{0,2}\.[0-9]{3,4}$)/)[0].
 split(".").reverse().join("-")
 ,
-cells['100d'].value.match(/.*?([0-9]{3,4} ?(leden|únor|březen|duben|květen|duben|červenec|červen|srpen|září|říjen|listopad|prosinec)? ?[0-9]{0,2}\.?)\ ?-.*/)[0].
+cells['100d'].value.match(/.*?([0-9]{3,4} ?(leden|únor|březen|duben|květen|duben|červenec|červen|srpen|září|říjen|listopad|prosinec)? ?[0-9]{0,2}\.?) ?\-.*/)[0].
 replace("ledna","1.").replace("leden","1.").
 replace("února","2.").replace("únor","2.").
 replace("března","3.").replace("březen","3.").
