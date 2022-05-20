@@ -185,3 +185,42 @@ do marc_each()
 end
 join_field(678a,'|')
 ```
+### 370ab,678a (Place of birth)
+  
+#### Required datafiles
+
+* geoauthorities
+* NKCR-QID convert table
+* mista
+
+#### GREL
+
+```
+coalesce(
+	with((cells['370a'].value.
+		match(/(^.*?)\, (.*)$/).join(" (") + ")").
+		cross('geoauthorities','151a').cells['_id'].value[0].cross('NKCR-QID convert table','nkcr').
+		cells['item'].value[0]
+	,part1,if(isError(part1),null,part1))
+	,
+	with(cells['678a'].value.
+		replace(" n."," nad").
+		replace(" p."," pod").
+		match(/[Nn]ar[a-zíýá]*\.? ?(se )?(asi )?(v lednu|v únoru|v březnu|v dubnu|v květnu|v červnu|v červenci|v srpnu|v září|v říjnu|v listopadu|v prosinci|v roce|roku|kolem roku|v r\.)? ?([^a-z]*) (ve?|na) ([a-zA-ZÀ-ž ]*)(\.|,|-|;)*.*/)[5].
+		strip().
+		cross('mista','place').cells['QID'].value[0]
+	,part2,if(isError(part2),null,part2))
+)
+```
+#### Catmandu
+
+`catmandu convert MARC --type XML --fix data/370ab,678a.fix to CSV --fields "_id,370a,370b,678a" < data/aut.xml > data/output.csv`
+
+fix:
+```
+do marc_each()
+  marc_map(370a,370a)
+  marc_map(370b,370b)
+  marc_map(678a,678a)
+end
+```
