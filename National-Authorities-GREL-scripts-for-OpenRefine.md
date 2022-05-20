@@ -1,3 +1,17 @@
+- [GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files](#grel-scripts-and-corresponding-catmandu-calls-for-extraction-of-wikidata-ready-data-from-czech-national-authority-files)
+  * [100abq (Personal name)](#100abq--personal-name-)
+    + [GREL](#grel)
+    + [Catmandu](#catmandu)
+  * [100d,046f,678a (Date of birth)](#100d-046f-678a--date-of-birth-)
+    + [GREL](#grel-1)
+    + [Catmandu](#catmandu-1)
+  * [100d,046g,678a (Date of death)](#100d-046g-678a--date-of-death-)
+    + [GREL](#grel-2)
+    + [Catmandu](#catmandu-2)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 ## GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files
 
 * Catmandu call = to extract information from MARC XML dumps
