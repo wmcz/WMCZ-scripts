@@ -189,9 +189,9 @@ join_field(678a,'|')
   
 #### Required datafiles
 
-* geoauthorities
-* NKCR-QID convert table
-* mista
+* <a href="https://github.com/wmcz/WMCZ-scripts/blob/main/geoauthorities.csv">geoauthorities</a>
+* <a href="https://github.com/wmcz/WMCZ-scripts/blob/main/NKCR-QID-convert-table.csv">NKCR-QID convert table</a> (from <a href="https://query.wikidata.org/#select%20%3Fitem%20%3Fnkcr%20where%20%7B%0A%0A%20%20%3Fitem%20p%3AP691%20%5Bps%3AP691%20%3Fnkcr%20%3B%20wikibase%3Arank%20%3Frank%20%5D%20filter%28%3Frank%20%21%3D%20wikibase%3ADeprecatedRank%29%20.%0A%0A%7D">this</a> query)
+* <a href="https://github.com/wmcz/WMCZ-scripts/blob/main/mista.csv">mista</a>
 
 #### GREL
 
