@@ -8,9 +8,12 @@
   * [100d,046g,678a (Date of death)](#100d-046g-678a--date-of-death-)
     + [GREL](#grel-2)
     + [Catmandu](#catmandu-2)
+  * [370ab,678a (Place of birth)](#370ab-678a--place-of-birth-)
+    + [Required datafiles](#required-datafiles)
+    + [GREL](#grel-3)
+    + [Catmandu](#catmandu-3)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
 
 ## GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files
 
