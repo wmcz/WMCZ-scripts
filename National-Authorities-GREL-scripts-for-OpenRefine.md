@@ -227,3 +227,40 @@ do marc_each()
   marc_map(678a,678a)
 end
 ```
+
+### 370ab,678a (Place of death)
+
+#### Required datafiles
+See section: place of birth.
+
+#### GREL
+```
+coalesce(
+	with((cells['370b'].value.
+		match(/(^.*?)\, (.*)$/).join(" (") + ")").
+		cross('geoauthorities','151a').cells['_id'].value[0].cross('NKCR-QID convert table','nkcr').
+		cells['item'].value[0]
+	,part1,if(isError(part1),null,part1))
+	,
+	with(cells['678a'].value.
+		replace(" n."," nad").
+		replace(" p."," pod").
+		match(/.*?([Zz]e|[Uu])mř[a-zíýá]*\.? ?(asi )?(v lednu|v únoru|v březnu|v dubnu|v květnu|v červnu|v červenci|v srpnu|v září|v říjnu|v listopadu|v prosinci|v roce|roku|kolem roku|v r\.)?  ?([^a-z]*) (ve?|na) ([a-zA-ZÀ-ž ]*)(\.|,|-|;)*.*/)[5].
+		strip().
+		cross('mista','place').cells['QID'].value[0]
+	,part2,if(isError(part2),null,part2))
+	,
+	if(cells['678a'].value.replace(" n."," nad").replace(" p."," pod").match(/.*?([Zz]emřel|[Uu]mřel|[Pp]opraven)(.*?[^0-9])[\.,].*/)[1].contains("tamtéž"),
+		with(cells['678a'].value.
+			replace(" n."," nad").
+			replace(" p."," pod").
+			match(/[Nn]ar[a-zíýá]*\.? ?(se )?(asi )?(v lednu|v únoru|v březnu|v dubnu|v květnu|v červnu|v červenci|v srpnu|v září|v říjnu|v listopadu|v prosinci|v roce|roku|kolem roku|v r\.)? ?([^a-z]*) (ve?|na) ([a-zA-ZÀ-ž ]*)(\.|,|-|;)*.*/)[5].
+			strip().
+			cross('mista','place').cells['QID'].value[0]
+			,part3,if(isError(part3),null,part3)),
+		null)
+)
+```
+#### Catmandu
+See section: place of birth.
+
