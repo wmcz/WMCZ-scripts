@@ -1,4 +1,5 @@
-- [GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files](#grel-scripts-and-corresponding-catmandu-calls-for-extraction-of-wikidata-ready-data-from-czech-national-authority-files)
+## GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files
+
   * [100abq (Personal name)](#100abq--personal-name-)
     + [GREL](#grel)
     + [Catmandu](#catmandu)
@@ -12,10 +13,16 @@
     + [Required datafiles](#required-datafiles)
     + [GREL](#grel-3)
     + [Catmandu](#catmandu-3)
+  * [370ab,678a (Place of death)](#370ab-678a--place-of-death-)
+    + [Required datafiles](#required-datafiles-1)
+    + [GREL](#grel-4)
+    + [Catmandu](#catmandu-4)
+  * [374a,678a (Occupation)](#374a-678a--occupation-)
+    + [Required datafiles](#required-datafiles-2)
+    + [Python](#python)
+    + [Catmandu](#catmandu-5)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
-## GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files
 
 * Catmandu call = to extract information from MARC XML dumps
 * OpenRefine GREL code = to transform values for Wikidata
@@ -264,3 +271,63 @@ coalesce(
 #### Catmandu
 See section: place of birth.
 
+### 374a,678a (Occupation)
+  
+#### Required datafiles
+
+* <a href="https://github.com/wmcz/WMCZ-scripts/blob/main/povolani.csv">povolani</a> (occupations as they appear in field 678a)
+* <a href="https://github.com/wmcz/WMCZ-scripts/blob/main/povolani2.csv">povolani2</a> (occupations as they appear in field 374a)
+
+#### Python
+The task is not trivial in GREL, so Python (also natively supported by OpenRefine) is used instead.
+Be sure to change the paths to files in the script.
+
+```
+stopwords = {}
+
+with open(r"/Users/vojte\Documents/povolani.csv",'r') as f:
+ for name in f:
+  stopwords[name.decode('utf8').split(";")[0]] = name.rstrip().split(";")[1]
+
+with open(r"/Users/vojte\Documents/povolani2.csv",'r') as f:
+ for name in f:
+  stopwords[name.decode('utf8').split(";")[0]] = name.rstrip().split(";")[1]
+
+add = []
+
+try:
+ for x in cells['374a'].value.split('|'):
+  if x.lower() in stopwords:
+   if (stopwords[x.lower()] not in add):
+    add.append(stopwords[x.lower()])
+except KeyError:
+  pass
+
+try:
+ for x in cells['678a'].value.replace(',',' ').replace('.',' ').split(' '):
+  if x.lower() in stopwords:
+   add.append(stopwords[x.lower()])
+except KeyError:
+  pass
+
+result = []
+[result.append(x) for x in add if x not in result]
+
+joined = ",".join(result)
+return joined 
+```
+
+#### Catmandu
+
+`catmandu convert MARC --type XML --fix data/374a.fix to CSV --fields "_id,374a,678a" < data/aut.xml > data/output.csv`
+
+fix:
+
+```
+do marc_each()
+  marc_map(374a,374a.$append,join:"|")
+  marc_map(678a,678a)
+end
+
+join_field(374a,'|')
+```
