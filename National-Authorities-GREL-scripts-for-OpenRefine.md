@@ -331,3 +331,43 @@ end
 
 join_field(374a,'|')
 ```
+
+### 375a,678a (Sex/gender)
+  
+#### GREL
+
+```
+with(cells['375a'].value,
+	option1,
+	if(option1.contains(/^(muž|žena)$/),
+		if(option1.contains(/^(muž)$/),
+			"Q6581097",
+			"Q6581072"
+			),
+		with(cells['678a'].value,
+			option2,
+			if(option2.contains(/^(Narozen |Německý |Americký | Francouzský |Autor | Britský | Ruský |Polský |Italský |Slovenský |Rakouský |Španělský |Anglický ).*$/),
+				"Q6581097",
+				if(option2.contains(/^(Narozena |Německá |Americká | Francouzská |Autorka | Britská | Ruská |Polská |Italská |Slovenská |Rakouská |Španělská |Anglická ).*$/),
+					"Q6581072",
+					null
+					)
+				)
+			)
+		)
+)
+```
+
+#### Catmandu
+`catmandu convert MARC --type XML --fix data/375a.fix to CSV --fields "_id,375a,678a" < data/aut.xml > data/output.csv`
+
+fix:
+
+```
+do marc_each()
+  marc_map(375a,375a.$append,join:"|")
+  marc_map(678a,678a)
+end
+
+join_field(375a,'|')
+```
