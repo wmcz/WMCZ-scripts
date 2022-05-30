@@ -24,10 +24,63 @@
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
-* Catmandu call = to extract information from MARC XML dumps
-* OpenRefine GREL code = to transform values for Wikidata
+* Catmandu script = to extract information from MARC XML dumps
+* OpenRefine GREL or Python code = to transform values for Wikidata
+
+### 100abq,500ia7 (Pseudonyms)
+Czech authority files handle pseudonyms as separate entries while Wikidata keep them generally in one item.
+#### Catmandu
+
+`catmandu convert MARC --type XML --fix data/100abq,500ia7.fix to CSV --fields "_id,100a,100b,100q,500ia7" < data/aut.xml > data/output.csv`
+
+fix:
+
+```
+do marc_each()
+  marc_map(100a,100a)
+  marc_map(100b,100b)
+  marc_map(100q,100q)
+  marc_map(500ia7,500ia7.$append,join:"$") 
+  
+end
+
+join_field(500ia7,'|')
+```
+
+#### GREL to exclude pseudonym entries from import
+
+1) extract pseudonym authority IDs:
+
+Create new column "pseudonyms"
+
+```
+forEach(filter(cells['500ia7'].value.split("|"),v,contains(v,/Pseudonym\:.*/)),v,v.match(/.*?Pseudonym\:\$[^\$]+\$(.*?)$/)[0]).join(',')
+
+```
+
+2) exclude pseudonym rows from import:
+
+```
+with(cells['_id'].value.cross('','pseudonyms').cells['pseudonyms'].value[0],findpseudo,if(isNull(findpseudo),null,"do not import"))
+```
+
+#### GREL to add pseudonyms of each item as authority IDs
+
 
 ### 100abq (Personal name)
+
+#### Catmandu
+
+`catmandu convert MARC --type XML --fix data/100abq.fix to CSV --fields "_id,100a,100b,100q" < data/aut.xml > data/output.csv`
+
+fix:
+```
+do marc_each()
+  marc_map(100a,100a)
+  marc_map(100b,100b)
+  marc_map(100q,100q)
+end
+```
 #### GREL
 ```
   if(isNonBlank(cells['100q'].value),
@@ -45,22 +98,24 @@
 	""
 	)
 ```
+  
+### 100d,046f,678a (Date of birth)
 
 #### Catmandu
 
-`catmandu convert MARC --type XML --fix data/100abq.fix to CSV --fields "_id,100a,100b,100q" < data/aut.xml > data/output.csv`
+`catmandu convert MARC --type XML --fix data/100d,046fg,678a.fix to CSV --fields "_id,100d,046f,046g,678a" < data/aut.xml > data/output.csv`
 
 fix:
 ```
 do marc_each()
-  marc_map(100a,100a)
-  marc_map(100b,100b)
-  marc_map(100q,100q)
+  marc_map(100d,100d)
+  marc_map(046f,046f)
+  marc_map(046g,046g)  
+  marc_map(678a,678a.$append)
 end
+join_field(678a,'|')
 ```
-  
-### 100d,046f,678a (Date of birth)
-  
+
 #### GREL
 
 ```
@@ -114,6 +169,7 @@ with([
 ].join(",").split(','), a, filter(a, v, v.length() == forEach(a, x, x.length()).sort()[-1]))[0]
 ```
 
+### 100d,046g,678a (Date of death)
 #### Catmandu
 
 `catmandu convert MARC --type XML --fix data/100d,046fg,678a.fix to CSV --fields "_id,100d,046f,046g,678a" < data/aut.xml > data/output.csv`
@@ -128,8 +184,7 @@ do marc_each()
 end
 join_field(678a,'|')
 ```
-### 100d,046g,678a (Date of death)
-  
+
 #### GREL
 ```
 with([
@@ -181,22 +236,21 @@ with([
 	part3,if(isError(part3),"",part3))
 ].join(",").split(','), a, filter(a, v, v.length() == forEach(a, x, x.length()).sort()[-1]))[0]
 ```
+
+### 370ab,678a (Place of birth)
 #### Catmandu
 
-`catmandu convert MARC --type XML --fix data/100d,046fg,678a.fix to CSV --fields "_id,100d,046f,046g,678a" < data/aut.xml > data/output.csv`
+`catmandu convert MARC --type XML --fix data/370ab,678a.fix to CSV --fields "_id,370a,370b,678a" < data/aut.xml > data/output.csv`
 
 fix:
 ```
 do marc_each()
-  marc_map(100d,100d)
-  marc_map(046f,046f)
-  marc_map(046g,046g)  
-  marc_map(678a,678a.$append)
+  marc_map(370a,370a)
+  marc_map(370b,370b)
+  marc_map(678a,678a)
 end
-join_field(678a,'|')
 ```
-### 370ab,678a (Place of birth)
-  
+
 #### Required datafiles
 
 * <a href="https://github.com/wmcz/WMCZ-scripts/blob/main/geoauthorities.csv">geoauthorities</a>
@@ -222,20 +276,11 @@ coalesce(
 	,part2,if(isError(part2),null,part2))
 )
 ```
-#### Catmandu
-
-`catmandu convert MARC --type XML --fix data/370ab,678a.fix to CSV --fields "_id,370a,370b,678a" < data/aut.xml > data/output.csv`
-
-fix:
-```
-do marc_each()
-  marc_map(370a,370a)
-  marc_map(370b,370b)
-  marc_map(678a,678a)
-end
-```
 
 ### 370ab,678a (Place of death)
+
+#### Catmandu
+See section: place of birth.
 
 #### Required datafiles
 See section: place of birth.
@@ -268,11 +313,24 @@ coalesce(
 		null)
 )
 ```
-#### Catmandu
-See section: place of birth.
 
 ### 374a,678a (Occupation)
-  
+
+#### Catmandu
+
+`catmandu convert MARC --type XML --fix data/374a.fix to CSV --fields "_id,374a,678a" < data/aut.xml > data/output.csv`
+
+fix:
+
+```
+do marc_each()
+  marc_map(374a,374a.$append,join:"|")
+  marc_map(678a,678a)
+end
+
+join_field(374a,'|')
+```
+
 #### Required datafiles
 
 * <a href="https://github.com/wmcz/WMCZ-scripts/blob/main/povolani.csv">povolani</a> (occupations as they appear in field 678a)
@@ -317,23 +375,22 @@ joined = ",".join(result)
 return joined 
 ```
 
-#### Catmandu
+### 375a,678a (Sex/gender)
 
-`catmandu convert MARC --type XML --fix data/374a.fix to CSV --fields "_id,374a,678a" < data/aut.xml > data/output.csv`
+#### Catmandu
+`catmandu convert MARC --type XML --fix data/375a.fix to CSV --fields "_id,375a,678a" < data/aut.xml > data/output.csv`
 
 fix:
 
 ```
 do marc_each()
-  marc_map(374a,374a.$append,join:"|")
+  marc_map(375a,375a.$append,join:"|")
   marc_map(678a,678a)
 end
 
-join_field(374a,'|')
+join_field(375a,'|')
 ```
 
-### 375a,678a (Sex/gender)
-  
 #### GREL
 
 ```
@@ -356,18 +413,4 @@ with(cells['375a'].value,
 			)
 		)
 )
-```
-
-#### Catmandu
-`catmandu convert MARC --type XML --fix data/375a.fix to CSV --fields "_id,375a,678a" < data/aut.xml > data/output.csv`
-
-fix:
-
-```
-do marc_each()
-  marc_map(375a,375a.$append,join:"|")
-  marc_map(678a,678a)
-end
-
-join_field(375a,'|')
 ```
