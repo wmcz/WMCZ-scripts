@@ -1,26 +1,36 @@
 ## GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files
-
-  * [100abq (Personal name)](#100abq--personal-name-)
-    + [GREL](#grel)
+- [GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files](#grel-scripts-and-corresponding-catmandu-calls-for-extraction-of-wikidata-ready-data-from-czech-national-authority-files)
+  * [100abq,500ia7 (Pseudonyms)](#100abq-500ia7--pseudonyms-)
     + [Catmandu](#catmandu)
-  * [100d,046f,678a (Date of birth)](#100d-046f-678a--date-of-birth-)
-    + [GREL](#grel-1)
+    + [GREL to exclude pseudonym entries from import](#grel-to-exclude-pseudonym-entries-from-import)
+    + [GREL to add pseudonyms of each item as authority IDs](#grel-to-add-pseudonyms-of-each-item-as-authority-ids)
+  * [100abq,678a (Czech description)](#100abq-678a--czech-description-)
     + [Catmandu](#catmandu-1)
-  * [100d,046g,678a (Date of death)](#100d-046g-678a--date-of-death-)
-    + [GREL](#grel-2)
+    + [Python](#python)
+  * [100abq (Personal name)](#100abq--personal-name-)
     + [Catmandu](#catmandu-2)
+    + [GREL](#grel)
+  * [100d,046f,678a (Date of birth)](#100d-046f-678a--date-of-birth-)
+    + [Catmandu](#catmandu-3)
+    + [GREL](#grel-1)
+  * [100d,046g,678a (Date of death)](#100d-046g-678a--date-of-death-)
+    + [Catmandu](#catmandu-4)
+    + [GREL](#grel-2)
   * [370ab,678a (Place of birth)](#370ab-678a--place-of-birth-)
+    + [Catmandu](#catmandu-5)
     + [Required datafiles](#required-datafiles)
     + [GREL](#grel-3)
-    + [Catmandu](#catmandu-3)
   * [370ab,678a (Place of death)](#370ab-678a--place-of-death-)
+    + [Catmandu](#catmandu-6)
     + [Required datafiles](#required-datafiles-1)
     + [GREL](#grel-4)
-    + [Catmandu](#catmandu-4)
   * [374a,678a (Occupation)](#374a-678a--occupation-)
+    + [Catmandu](#catmandu-7)
     + [Required datafiles](#required-datafiles-2)
-    + [Python](#python)
-    + [Catmandu](#catmandu-5)
+    + [Python](#python-1)
+  * [375a,678a (Sex/gender)](#375a-678a--sex-gender-)
+    + [Catmandu](#catmandu-8)
+    + [GREL](#grel-5)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -67,9 +77,46 @@ with(cells['_id'].value.cross('','pseudonyms').cells['pseudonyms'].value[0],find
 #### GREL to add pseudonyms of each item as authority IDs
 
 ```
-
 forEach(filter(cells['500ia7'].value.split("|"),v,contains(v,/Pseudonym\:.*/)),v,v.split("$").slice(1,3).reverse().join("$").chomp(",")).join("|")
+```
 
+### 100abq,678a (Czech description)
+
+#### Catmandu
+
+`catmandu convert MARC --type XML --fix data/100abq,678a.fix to CSV --fields "_id,100a,100b,100q,678a" < data/aut.xml > data/output.csv`
+
+fix:
+```
+do marc_each()
+  marc_map(100a,100a)
+  marc_map(100b,100b)
+  marc_map(100q,100q)
+  marc_map(678a,78a)
+end
+```
+
+#### Python
+
+```
+import re
+string=re.sub(" ?\(.*?\)","", cells['678a'].value)
+f=""
+if len(string) > 250 : 
+  array = re.split("(.*?[\.] ?(?![a-z 0-9]))",string)
+  for x in array:
+    if len(f + x) < 250:
+       f = f + x
+  if f == "":
+    array = re.split(",",string)
+    for x in array:
+      if len(f + x) < 250:
+         f = f + x
+
+else:
+  f = string
+
+return f
 ```
 
 ### 100abq (Personal name)
