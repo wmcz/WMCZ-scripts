@@ -66,6 +66,11 @@ with(cells['_id'].value.cross('','pseudonyms').cells['pseudonyms'].value[0],find
 
 #### GREL to add pseudonyms of each item as authority IDs
 
+```
+
+forEach(filter(cells['500ia7'].value.split("|"),v,contains(v,/Pseudonym\:.*/)),v,v.split("$").slice(1,3).reverse().join("$").chomp(",")).join("|")
+
+```
 
 ### 100abq (Personal name)
 
