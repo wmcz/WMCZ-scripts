@@ -480,6 +480,6 @@ end
 join_field(377a,'|')
 ```
 #### Required datafiles
-* <a href="https://github.com/wmcz/WMCZ-scripts/blob/main/jazyky.csv">jazyky</a> - language code table, update from <ahref="https://query.wikidata.org/#select%20distinct%20%3Fitem%20%3Fkod%20where%20%7B%0A%0A%20%20%3Fitem%20wdt%3AP219%20%5B%5D%20.%0A%20%20optional%20%7B%3Fitem%20p%3AP219%20%3Fs%20.%20%3Fs%20ps%3AP219%20%3Fkod1%20.%20minus%20%7B%3Fs%20pq%3AP518%20wd%3AQ1631107%20.%20%7D%20%7D%0A%20%20optional%20%7B%3Fitem%20p%3AP219%20%5Bps%3AP219%20%3Fkod2%20%3B%20pq%3AP518%20wd%3AQ1631107%20%5D%20.%7D%0A%20%20bind%28coalesce%28%3Fkod2%2C%3Fkod1%29%20as%20%3Fkod%29%20.%0A%0A%7D">this</a> query
+* <a href="https://github.com/wmcz/WMCZ-scripts/blob/main/jazyky.csv">jazyky</a> - language code table, update from <a href="https://query.wikidata.org/#select%20distinct%20%3Fitem%20%3Fkod%20where%20%7B%0A%0A%20%20%3Fitem%20wdt%3AP219%20%5B%5D%20.%0A%20%20optional%20%7B%3Fitem%20p%3AP219%20%3Fs%20.%20%3Fs%20ps%3AP219%20%3Fkod1%20.%20minus%20%7B%3Fs%20pq%3AP518%20wd%3AQ1631107%20.%20%7D%20%7D%0A%20%20optional%20%7B%3Fitem%20p%3AP219%20%5Bps%3AP219%20%3Fkod2%20%3B%20pq%3AP518%20wd%3AQ1631107%20%5D%20.%7D%0A%20%20bind%28coalesce%28%3Fkod2%2C%3Fkod1%29%20as%20%3Fkod%29%20.%0A%0A%7D">this</a> query
 
 #### GREL
