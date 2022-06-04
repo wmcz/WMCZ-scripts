@@ -150,7 +150,33 @@ end
 	""
 	)
 ```
-  
+
+### 100abq,[gender] (Birth name)
+
+#### Catmandu
+See personal name. You will also need a column with gender, if known (See section "Sex/gender")
+
+#### Required datafiles
+* Birth names from Wikidata (safe list of names previously used in NKC data) <a href="https://github.com/wmcz/WMCZ-scripts/blob/main/birth_names.csv">here</a> (can be updated from <a href="https://query.wikidata.org/#select%20distinct%20%3Fname_item%20%3Fname%20%3Fgender%20%3Fconcatenated%20with%20%7B%0A%20%20select%20%3Fname_item%20%3Fname%20where%20%7B%0A%20%20%20%20%3Fitem%20wdt%3AP691%20%5B%5D%20.%0A%20%20%20%20%3Fitem%20p%3AP735%20%5Bps%3AP735%20%3Fname_item%20%3B%20prov%3AwasDerivedFrom%2Fpr%3AP248%20wd%3AQ13550863%20%3B%20wikibase%3Arank%20wikibase%3ANormalRank%20%5D%20.%0A%20%20%20%20%3Fname_item%20wdt%3AP1705%20%3Fname_in_language%20.%20%0A%20%20%20%20bind%28str%28%3Fname_in_language%29%20as%20%3Fname%29%20filter%28%21contains%28%3Fname%2C%22.%22%29%29.%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%20as%20%25names%20where%20%7B%0A%20%20include%20%25names%0A%20%20optional%20%7B%3Fname_item%20p%3AP31%2Fps%3AP31%20wd%3AQ3409032%20.%20bind%28%22unisex%22%20as%20%3Fgender%20%29%20.%7D%0A%20%20optional%20%7B%3Fname_item%20p%3AP31%2Fps%3AP31%20wd%3AQ12308941%20.%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Fname_item%20p%3AP31%2Fps%3AP31%20wd%3AQ11879590%20.%0A%20%20%20%20%20%20%20%20%20%20%20%20bind%28%22unisex%22%20as%20%3Fgender%20%29%20.%7D%0A%20%20optional%20%7B%3Fname_item%20p%3AP31%2Fps%3AP31%20wd%3AQ12308941%20.%20bind%28%22male%22%20as%20%3Fgender%20%29%20.%7D%0A%20%20optional%20%7B%3Fname_item%20p%3AP31%2Fps%3AP31%20wd%3AQ11879590%20.%20bind%28%22female%22%20as%20%3Fgender%29%20.%7D%0A%20%20bind%28%20%28if%28%20bound%28%3Fgender%29%20%2Cconcat%28str%28%3Fname%29%2C%22_%22%2Cstr%28%3Fgender%29%29%2Cconcat%28str%28%3Fname%29%2C%22_unisex%22%29%20%29%29%20as%20%3Fconcatenated%20%29%20.%0A%20%20%0A%7D%20group%20by%20%3Fname_item%20%3Fname%20%3Fgender%20%3Fconcatenated">this SPARQL query</a>)
+
+#### GREL
+```
+forEach(
+	with(cells['name'].value.split(" "),
+		namearray,
+		slice(slice(namearray,0,length(namearray)-1),0,3)),
+	name,
+	with(
+		if(isBlank(cells['gender'].value),
+			if(isError(name.cross('birth_names','name').cells['name_item'].value[1]),name.cross('birth_names','name').cells['name_item'].value[0],null),
+			(name + "_" + cells['gender'].value.replace("Q6581097","male").replace("Q6581072","female")).cross('birth_names','concatenated').cells['name_item'].value[0]
+			),
+		gender_specific_version,
+		if(isNull(gender_specific_version),(name + "_unisex").cross('birth_names','concatenated').cells['name_item'].value[0],gender_specific_version)
+		)
+	).toString().replace(/[\[\] ]/,"")
+```
+
 ### 100d,046f,678a (Date of birth)
 
 #### Catmandu
