@@ -135,7 +135,7 @@ end
 ```
 #### GREL
 ```
-  if(isNonBlank(cells['100q'].value),
+(if(isNonBlank(cells['100q'].value),
 	cells['100q'].value.chomp(",").strip().replace("(","").replace(")","") + " " + cells['100a'].value.chomp(",").split(",").get(0).strip(),
 	if(cells['100a'].value.chomp(",").split(",").length() == 3,
 		cells['100a'].value.chomp(",").split(",").get(1).strip() + " " + cells['100a'].value.chomp(",").split(",").get(2).strip() + " " + cells['100a'].value.chomp(",").split(",").get(0).strip(),
@@ -148,7 +148,7 @@ end
 + if(isNonBlank(cells['100b'].value),
 	" " + cells['100b'].value.strip().chomp(","),
 	""
-	)
+	)).replace(">>","").replace("<<","")
 ```
 
 ### 100abq,[gender] (Birth name)
