@@ -1,4 +1,3 @@
-## GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files
 - [GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files](#grel-scripts-and-corresponding-catmandu-calls-for-extraction-of-wikidata-ready-data-from-czech-national-authority-files)
   * [100abq,500ia7 (Pseudonyms)](#100abq-500ia7--pseudonyms-)
     + [Catmandu](#catmandu)
@@ -10,27 +9,39 @@
   * [100abq (Personal name)](#100abq--personal-name-)
     + [Catmandu](#catmandu-2)
     + [GREL](#grel)
-  * [100d,046f,678a (Date of birth)](#100d-046f-678a--date-of-birth-)
+  * [100abq,[gender] (Birth name)](#100abq--gender---birth-name-)
     + [Catmandu](#catmandu-3)
-    + [GREL](#grel-1)
-  * [100d,046g,678a (Date of death)](#100d-046g-678a--date-of-death-)
-    + [Catmandu](#catmandu-4)
-    + [GREL](#grel-2)
-  * [370ab,678a (Place of birth)](#370ab-678a--place-of-birth-)
-    + [Catmandu](#catmandu-5)
     + [Required datafiles](#required-datafiles)
-    + [GREL](#grel-3)
-  * [370ab,678a (Place of death)](#370ab-678a--place-of-death-)
-    + [Catmandu](#catmandu-6)
+    + [GREL](#grel-1)
+  * [100a (Surname)](#100a--surname-)
+    + [Catmandu](#catmandu-4)
     + [Required datafiles](#required-datafiles-1)
+    + [GREL](#grel-2)
+  * [100d,046f,678a (Date of birth)](#100d-046f-678a--date-of-birth-)
+    + [Catmandu](#catmandu-5)
+    + [GREL](#grel-3)
+  * [100d,046g,678a (Date of death)](#100d-046g-678a--date-of-death-)
+    + [Catmandu](#catmandu-6)
     + [GREL](#grel-4)
-  * [374a,678a (Occupation)](#374a-678a--occupation-)
+  * [370ab,678a (Place of birth)](#370ab-678a--place-of-birth-)
     + [Catmandu](#catmandu-7)
     + [Required datafiles](#required-datafiles-2)
+    + [GREL](#grel-5)
+  * [370ab,678a (Place of death)](#370ab-678a--place-of-death-)
+    + [Catmandu](#catmandu-8)
+    + [Required datafiles](#required-datafiles-3)
+    + [GREL](#grel-6)
+  * [374a,678a (Occupation)](#374a-678a--occupation-)
+    + [Catmandu](#catmandu-9)
+    + [Required datafiles](#required-datafiles-4)
     + [Python](#python-1)
   * [375a,678a (Sex/gender)](#375a-678a--sex-gender-)
-    + [Catmandu](#catmandu-8)
-    + [GREL](#grel-5)
+    + [Catmandu](#catmandu-10)
+    + [GREL](#grel-7)
+  * [377a (Languages written)](#377a--languages-written-)
+    + [Catmandu](#catmandu-11)
+    + [Required datafiles](#required-datafiles-5)
+    + [GREL](#grel-8)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -175,6 +186,27 @@ forEach(
 		if(isNull(gender_specific_version),(name + "_unisex").cross('birth_names','concatenated').cells['name_item'].value[0],gender_specific_version)
 		)
 	).toString().replace(/[\[\] ]/,"")
+```
+
+### 100a (Surname)
+
+#### Catmandu
+See section related to birth name.
+
+#### Required datafiles
+* list of surnames (surnames.csv), you can update it from <a href="https://query.wikidata.org/#select%20distinct%20%3Fsurname%20%28sample%28%3Flabel_str%29%20as%20%3Flabel_str%29%20%28sample%28%3Falphabet%29%20as%20%3Falphabet%29%20where%20%7B%0A%20%20%0A%20%20%3Fsurname%20wdt%3AP31%20wd%3AQ101352%20.%0A%20%20minus%20%7B%3Fsurname%20wdt%3AP31%20wd%3AQ4167410%20.%7D%0A%20%20%3Fsurname%20wdt%3AP1705%20%3Flabel%20.%0A%20%20bind%28str%28%3Flabel%29%20as%20%3Flabel_str%29%20.%0A%20%20optional%20%7B%3Fsurname%20wdt%3AP282%20%3Falphabet%20.%20%7D%0A%20%20%0A%7D%20group%20by%20%3Fsurname%20%3Flabel_str%20%3Falphabet">this</a> SPARQL query)
+
+#### GREL
+
+```
+forEach(
+	with(cells['100a'].value,
+		v,
+		substring(v,0,indexOf(v,",")
+		)
+	).split("-"),
+	surname,
+	strip(surname).cross('surnames','label').cells['surname'].value[0]).join(",")
 ```
 
 ### 100d,046f,678a (Date of birth)
