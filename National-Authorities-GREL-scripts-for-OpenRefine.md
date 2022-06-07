@@ -103,7 +103,7 @@ do marc_each()
   marc_map(100a,100a)
   marc_map(100b,100b)
   marc_map(100q,100q)
-  marc_map(678a,78a)
+  marc_map(678a,678a)
 end
 ```
 
