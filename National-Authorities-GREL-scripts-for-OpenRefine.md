@@ -551,3 +551,35 @@ forEach(
 	v,
 	v.cross('jazyky','kod').cells['item'].value[0])
 ```
+
+### 024 (ORCID, ISNI, Wikidata QID)
+
+#### Catmandu
+`catmandu convert MARC --type XML --fix data/024.fix to CSV --fields "_id,024a2" < data/aut.xml > data/output.csv`
+
+```
+do marc_each()
+  marc_map(024a2,024a2.$append,join:"$")
+end
+join_field(024a2,'|')
+```
+
+#### GREL
+
+ISNI:
+
+```
+filter(cells['0247a2'].value.split("|"),v,v.contains("isni"))[0].strip().chomp("$isni").match(/^([0-9]{16})$/)[0]
+```
+
+ORCID:
+
+```
+filter(cells['0247a2'].value.split("|"),v,v.contains("orcid"))[0].strip().chomp("$orcid").match(/^(0000-000(1\-[5-9]|2\-[0-9]|3\-[0-4])\d{3}\-\d{3}[\dX])$/)[0]
+```
+
+QID:
+
+```
+filter(cells['0247a2'].value.split("|"),v,v.contains("wikidata"))[0].strip().chomp("$wikidata").match(/^(Q[0-9]{1,10})$/)[0]
+```
