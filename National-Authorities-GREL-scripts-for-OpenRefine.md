@@ -447,8 +447,9 @@ join_field(374a,'|')
 * <a href="https://github.com/wmcz/WMCZ-scripts/blob/main/povolani2.csv">povolani2</a> (occupations as they appear in field 374a)
 
 #### Python
-The task is not trivial in GREL, so Python (also natively supported by OpenRefine) is used instead.
-Be sure to change the paths to files in the script.
+The task is not trivial in GREL, so Python (also natively supported by OpenRefine) is used instead. The task can take up to several hours on a full dataset.
+
+Be sure to also change the paths to files in the script.
 
 ```
 stopwords = {}
@@ -549,7 +550,7 @@ forEach(
 		x,x!="mul"
 		),
 	v,
-	v.cross('jazyky','kod').cells['item'].value[0])
+	v.cross('jazyky','kod').cells['item'].value[0]).join(",")
 ```
 
 ### 024 (ORCID, ISNI, Wikidata QID)
