@@ -332,7 +332,10 @@ with([
 		split(".").reverse().join("-"),
 	part2,if(isError(part2),"",part2))
 	,
-	with(cells['100d'].value.match(/.*?\-([0-9]{3,4} ?(leden|únor|březen|duben|květen|duben|červenec|červen|srpen|září|říjen|listopad|prosinec)? ?[0-9]{0,2}\.?).*/)[0].
+	with(with(cells['100d'].value.match(/.*?\-([0-9]{3,4} ?(leden|únor|březen|duben|květen|duben|červenec|červen|srpen|září|říjen|listopad|prosinec)? ?[0-9]{0,2}\.?) ?(př\. Kr\.)?.*/),
+                fulldate,
+                if(fulldate.inArray("př. Kr."),("-" + fulldate[0]).replace("--","-"),fulldate[0])
+                ).
 		replace("ledna","1.").replace("leden","1.").
 		replace("února","2.").replace("únor","2.").
 		replace("března","3.").replace("březen","3.").
@@ -345,8 +348,8 @@ with([
 		replace("října","10.").replace("říjen","10.").
 		replace("listopadu","11.").replace("listopad","11.").
 		replace("prosince","12.").replace("prosinec","12.").strip().
-		replace(/^([0-9]{3,4} )/,"$1-").replace(" ","").replace(/\.$/,"").replace(".","-").
-		replace(/^([0-9]{3}\-)/,"0$1").replace(/\-([0-9]\-)/,"\-0$1").replace(/\-([0-9]$)/,"\-0$1"),
+		replace(/^(\-?[0-9]{3,4} )/,"$1-").replace(" ","").replace(/\.$/,"").replace(".","-").
+		replace(/^(\-?)([0-9]{3}($|\-))/,"$10$2").replace(/\-([0-9]\-)/,"\-0$1").replace(/\-([0-9]$)/,"\-0$1"),
 	part3,if(isError(part3),"",part3))
 ].join(",").split(','), a, filter(a, v, v.length() == forEach(a, x, x.length()).sort()[-1]))[0]
 ```
