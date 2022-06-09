@@ -453,29 +453,30 @@ Be sure to also change the paths to files in the script.
 
 ```
 stopwords = {}
+stopwords2 = {}
 
 with open(r"/Users/vojte\Documents/povolani.csv",'r') as f:
  for name in f:
   stopwords[name.decode('utf8').split(";")[0]] = name.rstrip().split(";")[1]
 
-with open(r"/Users/vojte\Documents/povolani2.csv",'r') as f:
- for name in f:
-  stopwords[name.decode('utf8').split(";")[0]] = name.rstrip().split(";")[1]
-
+with open(r"/Users/vojte\Documents/povolani2.csv",'r') as g:
+ for name in g:
+  stopwords2[name.decode('utf8').split(";")[0]] = name.rstrip().split(";")[1]
+  
 add = []
-
-try:
- for x in cells['374a'].value.split('|'):
-  if x.lower() in stopwords:
-   if (stopwords[x.lower()] not in add):
-    add.append(stopwords[x.lower()])
-except KeyError:
-  pass
 
 try:
  for x in cells['678a'].value.replace(',',' ').replace('.',' ').split(' '):
   if x.lower() in stopwords:
    add.append(stopwords[x.lower()])
+except KeyError:
+  pass
+
+try:
+ for x in cells['374a'].value.split('|'):
+  if x.lower() in stopwords2:
+   if (stopwords2[x.lower()] not in add):
+    add.append(stopwords2[x.lower()])
 except KeyError:
   pass
 
