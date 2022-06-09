@@ -252,7 +252,7 @@ with([
 		replace("září","9.").
 		replace("října","10.").replace("říjnu","10.").
 		replace("listopadu","11.").
-		replace("prosince","12.").replace("prosinci","12.").
+		replace("prosince","12.").replace("prosinci","12.").strip().
 		replace("roku","").replace("r.","").replace(" ","").
 		match(/(^[0-9]{0,2}\.?[0-9]{0,2}\.?[0-9]{3,4}$)/)[0].
 		replace(/^([1-9]\.)/,"0$1").replace(/\.([1-9]\.)/,"\.0$1").replace(/\.([0-9]{3}$)/,"\.0$1").
@@ -272,7 +272,7 @@ with([
 		replace("září","9.").
 		replace("října","10.").replace("říjen","10.").
 		replace("listopadu","11.").replace("listopad","11.").
-		replace("prosince","12.").replace("prosinec","12.").
+		replace("prosince","12.").replace("prosinec","12.").strip().
 		replace(/^([0-9]{3,4} )/,"$1-").replace(" ","").replace(/\.$/,"").replace(".","-").
 		replace(/^([0-9]{3}\-)/,"0$1").replace(/\-([0-9]\-)/,"\-0$1").replace(/\-([0-9]$)/,"\-0$1"),
 	part3,if(isError(part3),"",part3))
@@ -320,7 +320,7 @@ with([
 		replace("září","9.").
 		replace("října","10.").replace("říjnu","10.").
 		replace("listopadu","11.").
-		replace("prosince","12.").replace("prosinci","12.").
+		replace("prosince","12.").replace("prosinci","12.").strip().
 		replace("roku","").replace("r.","").replace(" ","").
 		match(/(^[0-9]{0,2}\.?[0-9]{0,2}\.?[0-9]{3,4}$)/)[0].
 		replace(/^([1-9]\.)/,"0$1").replace(/\.([1-9]\.)/,"\.0$1").replace(/\.([0-9]{3}$)/,"\.0$1").
@@ -340,7 +340,7 @@ with([
 		replace("září","9.").
 		replace("října","10.").replace("říjen","10.").
 		replace("listopadu","11.").replace("listopad","11.").
-		replace("prosince","12.").replace("prosinec","12.").
+		replace("prosince","12.").replace("prosinec","12.").strip().
 		replace(/^([0-9]{3,4} )/,"$1-").replace(" ","").replace(/\.$/,"").replace(".","-").
 		replace(/^([0-9]{3}\-)/,"0$1").replace(/\-([0-9]\-)/,"\-0$1").replace(/\-([0-9]$)/,"\-0$1"),
 	part3,if(isError(part3),"",part3))
