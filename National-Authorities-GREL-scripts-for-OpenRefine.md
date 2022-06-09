@@ -583,4 +583,11 @@ QID:
 
 ```
 filter(cells['0247a2'].value.split("|"),v,v.contains("wikidata"))[0].strip().chomp("$wikidata").match(/^(Q[0-9]{1,10})$/)[0]
+
+```
+
+Always check that the QID has not been deprecated in Wikidata (source data from <a href="https://query.wikidata.org/#select%20%3Fitem%20%3Fnkcr%20where%20%7B%0A%0A%20%20%3Fitem%20p%3AP691%20%5Bps%3AP691%20%3Fnkcr%20%3B%20wikibase%3Arank%20%3Frank%20%5D%20filter%28%3Frank%20%3D%20wikibase%3ADeprecatedRank%29%20.%0A%0A%7D">this</a> query): 
+
+```
+if(cells['_id'].value == cells['wikidata'].value.cross('deprecated nkcr','nkcr').cells['item'].value[0],"do not import",null)
 ```
