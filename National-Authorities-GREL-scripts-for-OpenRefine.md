@@ -570,7 +570,7 @@ join_field(024a2,'|')
 ISNI:
 
 ```
-filter(cells['0247a2'].value.split("|"),v,v.contains("isni"))[0].strip().chomp("$isni").match(/^([0-9]{16})$/)[0]
+filter(cells['0247a2'].value.split("|"),v,v.contains("isni"))[0].strip().chomp("$isni").match(/^([0-9]{16})$/)[0].splitByLengths(4,4,4,4).join(" ")
 ```
 
 ORCID:
