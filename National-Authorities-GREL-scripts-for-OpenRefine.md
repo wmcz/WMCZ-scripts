@@ -229,58 +229,61 @@ join_field(678a,'|')
 #### GREL
 
 ```
-with([
-	with(if (cells['046f'].value.length() == 8,
-		cells['046f'].value.splitByLengths(4,2,2).join("-"),
-		if (cells['046f'].value.length() == 6,
-			cells['046f'].value.splitByLengths(4,2).join("-"),
-			if (cells['046f'].value.length() == 4,cells['046f'].value,"")
-			)
-		).match(/(^[0-9]{2}\.[0-9]{2}\.[0-9]{3,4}$|^[0-9]{3,4}$|^[0-9]{0,2}\.[0-9]{3,4}$)/)[0],
-	part1,if(isError(part1),"",part1))
-	,
-	with(cells['678a'].value.match(/.*?[Nn]aro[a-zíýá]*\.? ?(se )?(ve? )?(roku |roce |r\. ?|\:? ?)?([0-9\. ]*(lednu|ledna|únoru|února|březnu|března|dubnu|dubna|květnu|května|červnu|června|červenci|července|srpnu|srpna|září|říjnu|října|listopadu|prosinci|prosince)? ?(roku |r\.)?[^a-zá-žA-ZÁ-Ž,\-\(]*).*/)[3].
-		strip().chomp(".").chomp(",").
-		replace("ledna","1.").replace("lednu","1.").
-		replace("února","2.").replace("únoru","2.").
-		replace("března","3.").replace("březnu","3.").
-		replace("dubna","4.").replace("dubnu","4.").
-		replace("května","5.").replace("květnu","5.").
-		replace("června","6.").replace("červnu","6.").
-		replace("července","7.").replace("červenci","7.").
-		replace("srpna","8.").replace("srpnu","8.").
-		replace("září","9.").
-		replace("října","10.").replace("říjnu","10.").
-		replace("listopadu","11.").
-		replace("prosince","12.").replace("prosinci","12.").strip().
-		replace("roku","").replace("r.","").replace(" ","").
-		match(/(^[0-9]{0,2}\.?[0-9]{0,2}\.?[0-9]{3,4}$)/)[0].
-		replace(/^([1-9]\.)/,"0$1").replace(/\.([1-9]\.)/,"\.0$1").replace(/\.([0-9]{3}$)/,"\.0$1").
-		match(/(^[0-9]{2}\.[0-9]{2}\.[0-9]{3,4}$|^[0-9]{3,4}$|^[0-9]{0,2}\.[0-9]{3,4}$)/)[0].
-		split(".").reverse().join("-"),
-	part2,if(isError(part2),"",part2))
-	,
-	with(with(
-		cells['100d'].value.match(/^([0-9]{3,4} ?(leden|únor|březen|duben|květen|duben|červenec|červen|srpen|září|říjen|listopad|prosinec)? ?[0-9]{0,2}\.?) ?(př\. Kr\.)? ?\-?.*/),
-		fulldate,
-		if(fulldate.inArray("př. Kr."),("-" + fulldate[0]).replace("--","-"),fulldate[0])
-		).
-		replace("ledna","1.").replace("leden","1.").
-		replace("února","2.").replace("únor","2.").
-		replace("března","3.").replace("březen","3.").
-		replace("dubna","4.").replace("duben","4.").
-		replace("května","5.").replace("květen","5.").
-		replace("července","7.").replace("červenec","7.").
-		replace("června","6.").replace("červen","6.").
-		replace("srpna","8.").replace("srpen","8.").
-		replace("září","9.").
-		replace("října","10.").replace("říjen","10.").
-		replace("listopadu","11.").replace("listopad","11.").
-		replace("prosince","12.").replace("prosinec","12.").strip().
-		replace(/^(\-?[0-9]{3,4} )/,"$1-").replace(" ","").replace(/\.$/,"").replace(".","-").
-		replace(/^(\-?)([0-9]{3}($|\-))/,"$10$2").replace(/\-([0-9]\-)/,"\-0$1").replace(/\-([0-9]$)/,"\-0$1"),
-	part3,if(isError(part3),"",part3))
-].join(",").split(','), a, filter(a, v, v.length() == forEach(a, x, x.length()).sort()[-1]))[0]
+with(
+	with([
+		with(if (cells['046f'].value.length() == 8,
+			cells['046f'].value.splitByLengths(4,2,2).join("-"),
+			if (cells['046f'].value.length() == 6,
+				cells['046f'].value.splitByLengths(4,2).join("-"),
+				if (cells['046f'].value.length() == 4,cells['046f'].value,"")
+				)
+			).match(/(^[0-9]{2}\.[0-9]{2}\.[0-9]{3,4}$|^[0-9]{3,4}$|^[0-9]{0,2}\.[0-9]{3,4}$)/)[0],
+		part1,if(isError(part1),"",part1))
+		,
+		with(cells['678a'].value.match(/.*?[Nn]aro[a-zíýá]*\.? ?(se )?(ve? )?(roku |roce |r\. ?|\:? ?)?([0-9\. ]*(lednu|ledna|únoru|února|březnu|března|dubnu|dubna|květnu|května|červnu|června|červenci|července|srpnu|srpna|září|říjnu|října|listopadu|prosinci|prosince)? ?(roku |r\.)?[^a-zá-žA-ZÁ-Ž,\-\(]*).*/)[3].
+			strip().chomp(".").chomp(",").
+			replace("ledna","1.").replace("lednu","1.").
+			replace("února","2.").replace("únoru","2.").
+			replace("března","3.").replace("březnu","3.").
+			replace("dubna","4.").replace("dubnu","4.").
+			replace("května","5.").replace("květnu","5.").
+			replace("června","6.").replace("červnu","6.").
+			replace("července","7.").replace("červenci","7.").
+			replace("srpna","8.").replace("srpnu","8.").
+			replace("září","9.").
+			replace("října","10.").replace("říjnu","10.").
+			replace("listopadu","11.").
+			replace("prosince","12.").replace("prosinci","12.").strip().
+			replace("roku","").replace("r.","").replace(" ","").
+			match(/(^[0-9]{0,2}\.?[0-9]{0,2}\.?[0-9]{3,4}$)/)[0].
+			replace(/^([1-9]\.)/,"0$1").replace(/\.([1-9]\.)/,"\.0$1").replace(/\.([0-9]{3}$)/,"\.0$1").
+			match(/(^[0-9]{2}\.[0-9]{2}\.[0-9]{3,4}$|^[0-9]{3,4}$|^[0-9]{0,2}\.[0-9]{3,4}$)/)[0].
+			split(".").reverse().join("-"),
+		part2,if(isError(part2),"",part2))
+		,
+		with(with(
+			cells['100d'].value.match(/^([0-9]{3,4} ?(leden|únor|březen|duben|květen|duben|červenec|červen|srpen|září|říjen|listopad|prosinec)? ?[0-9]{0,2}\.?) ?(př\. Kr\.)? ?\-?.*/),
+			fulldate,
+			if(fulldate.inArray("př. Kr."),("-" + fulldate[0]).replace("--","-"),fulldate[0])
+			).
+			replace("ledna","1.").replace("leden","1.").
+			replace("února","2.").replace("únor","2.").
+			replace("března","3.").replace("březen","3.").
+			replace("dubna","4.").replace("duben","4.").
+			replace("května","5.").replace("květen","5.").
+			replace("července","7.").replace("červenec","7.").
+			replace("června","6.").replace("červen","6.").
+			replace("srpna","8.").replace("srpen","8.").
+			replace("září","9.").
+			replace("října","10.").replace("říjen","10.").
+			replace("listopadu","11.").replace("listopad","11.").
+			replace("prosince","12.").replace("prosinec","12.").strip().
+			replace(/^(\-?[0-9]{3,4} )/,"$1-").replace(" ","").replace(/\.$/,"").replace(".","-").
+			replace(/^(\-?)([0-9]{3}($|\-))/,"$10$2").replace(/\-([0-9]\-)/,"\-0$1").replace(/\-([0-9]$)/,"\-0$1"),
+		part3,if(isError(part3),"",part3))
+	].join(",").split(','), a, filter(a, v, v.length() == forEach(a, x, x.length()).sort()[-1]))[0],
+final,if( diff((final.toDate('yyyy-MM-dd')), ("1582-10-15".toDate('yyyy-MM-dd')), "days")<0,final+"_Q1985786",final)
+)
 ```
 
 ### 100d,046g,678a (Date of death)
@@ -301,57 +304,60 @@ join_field(678a,'|')
 
 #### GREL
 ```
-with([
-	with(if (cells['046g'].value.length() == 8,
-		cells['046g'].value.splitByLengths(4,2,2).join("-"),
-		if (cells['046g'].value.length() == 6,
-			cells['046g'].value.splitByLengths(4,2).join("-"),
-			if (cells['046g'].value.length() == 4,cells['046g'].value,"")
-			)
-		).match(/(^[0-9]{2}\.[0-9]{2}\.[0-9]{3,4}$|^[0-9]{3,4}$|^[0-9]{0,2}\.[0-9]{3,4}$)/)[0],
-	part1,if(isError(part1),"",part1))
-	,
-	with(cells['678a'].value.match(/.*?([Zz]e|[Uu])mř[a-zíýá]*\.? ?(ve? )?(roku |roce |r\. ?|\:? ?)?([0-9\. ]*(lednu|ledna|únoru|února|březnu|března|dubnu|dubna|květnu|května|červnu|června|červenci|července|srpnu|srpna|září|říjnu|října|listopadu|prosinci|prosince)? ?(roku |r\.)?[^a-zá-žA-ZÁ-Ž,\-\(]*).*/)[3].
-		strip().chomp(".").chomp(",").
-		replace("ledna","1.").replace("lednu","1.").
-		replace("února","2.").replace("únoru","2.").
-		replace("března","3.").replace("březnu","3.").
-		replace("dubna","4.").replace("dubnu","4.").
-		replace("května","5.").replace("květnu","5.").
-		replace("června","6.").replace("červnu","6.").
-		replace("července","7.").replace("červenci","7.").
-		replace("srpna","8.").replace("srpnu","8.").
-		replace("září","9.").
-		replace("října","10.").replace("říjnu","10.").
-		replace("listopadu","11.").
-		replace("prosince","12.").replace("prosinci","12.").strip().
-		replace("roku","").replace("r.","").replace(" ","").
-		match(/(^[0-9]{0,2}\.?[0-9]{0,2}\.?[0-9]{3,4}$)/)[0].
-		replace(/^([1-9]\.)/,"0$1").replace(/\.([1-9]\.)/,"\.0$1").replace(/\.([0-9]{3}$)/,"\.0$1").
-		match(/(^[0-9]{2}\.[0-9]{2}\.[0-9]{3,4}$|^[0-9]{3,4}$|^[0-9]{0,2}\.[0-9]{3,4}$)/)[0].
-		split(".").reverse().join("-"),
-	part2,if(isError(part2),"",part2))
-	,
-	with(with(cells['100d'].value.match(/.*?\-([0-9]{3,4} ?(leden|únor|březen|duben|květen|duben|červenec|červen|srpen|září|říjen|listopad|prosinec)? ?[0-9]{0,2}\.?) ?(př\. Kr\.)?.*/),
-                fulldate,
-                if(fulldate.inArray("př. Kr."),("-" + fulldate[0]).replace("--","-"),fulldate[0])
-                ).
-		replace("ledna","1.").replace("leden","1.").
-		replace("února","2.").replace("únor","2.").
-		replace("března","3.").replace("březen","3.").
-		replace("dubna","4.").replace("duben","4.").
-		replace("května","5.").replace("květen","5.").
-		replace("července","7.").replace("červenec","7.").
-		replace("června","6.").replace("červen","6.").
-		replace("srpna","8.").replace("srpen","8.").
-		replace("září","9.").
-		replace("října","10.").replace("říjen","10.").
-		replace("listopadu","11.").replace("listopad","11.").
-		replace("prosince","12.").replace("prosinec","12.").strip().
-		replace(/^(\-?[0-9]{3,4} )/,"$1-").replace(" ","").replace(/\.$/,"").replace(".","-").
-		replace(/^(\-?)([0-9]{3}($|\-))/,"$10$2").replace(/\-([0-9]\-)/,"\-0$1").replace(/\-([0-9]$)/,"\-0$1"),
-	part3,if(isError(part3),"",part3))
-].join(",").split(','), a, filter(a, v, v.length() == forEach(a, x, x.length()).sort()[-1]))[0]
+with(
+	with([
+		with(if (cells['046g'].value.length() == 8,
+			cells['046g'].value.splitByLengths(4,2,2).join("-"),
+			if (cells['046g'].value.length() == 6,
+				cells['046g'].value.splitByLengths(4,2).join("-"),
+				if (cells['046g'].value.length() == 4,cells['046g'].value,"")
+				)
+			).match(/(^[0-9]{2}\.[0-9]{2}\.[0-9]{3,4}$|^[0-9]{3,4}$|^[0-9]{0,2}\.[0-9]{3,4}$)/)[0],
+		part1,if(isError(part1),"",part1))
+		,
+		with(cells['678a'].value.match(/.*?([Zz]e|[Uu])mř[a-zíýá]*\.? ?(ve? )?(roku |roce |r\. ?|\:? ?)?([0-9\. ]*(lednu|ledna|únoru|února|březnu|března|dubnu|dubna|květnu|května|červnu|června|červenci|července|srpnu|srpna|září|říjnu|října|listopadu|prosinci|prosince)? ?(roku |r\.)?[^a-zá-žA-ZÁ-Ž,\-\(]*).*/)[3].
+			strip().chomp(".").chomp(",").
+			replace("ledna","1.").replace("lednu","1.").
+			replace("února","2.").replace("únoru","2.").
+			replace("března","3.").replace("březnu","3.").
+			replace("dubna","4.").replace("dubnu","4.").
+			replace("května","5.").replace("květnu","5.").
+			replace("června","6.").replace("červnu","6.").
+			replace("července","7.").replace("červenci","7.").
+			replace("srpna","8.").replace("srpnu","8.").
+			replace("září","9.").
+			replace("října","10.").replace("říjnu","10.").
+			replace("listopadu","11.").
+			replace("prosince","12.").replace("prosinci","12.").strip().
+			replace("roku","").replace("r.","").replace(" ","").
+			match(/(^[0-9]{0,2}\.?[0-9]{0,2}\.?[0-9]{3,4}$)/)[0].
+			replace(/^([1-9]\.)/,"0$1").replace(/\.([1-9]\.)/,"\.0$1").replace(/\.([0-9]{3}$)/,"\.0$1").
+			match(/(^[0-9]{2}\.[0-9]{2}\.[0-9]{3,4}$|^[0-9]{3,4}$|^[0-9]{0,2}\.[0-9]{3,4}$)/)[0].
+			split(".").reverse().join("-"),
+		part2,if(isError(part2),"",part2))
+		,
+		with(with(cells['100d'].value.match(/.*?\-([0-9]{3,4} ?(leden|únor|březen|duben|květen|duben|červenec|červen|srpen|září|říjen|listopad|prosinec)? ?[0-9]{0,2}\.?) ?(př\. Kr\.)?.*/),
+					fulldate,
+					if(fulldate.inArray("př. Kr."),("-" + fulldate[0]).replace("--","-"),fulldate[0])
+					).
+			replace("ledna","1.").replace("leden","1.").
+			replace("února","2.").replace("únor","2.").
+			replace("března","3.").replace("březen","3.").
+			replace("dubna","4.").replace("duben","4.").
+			replace("května","5.").replace("květen","5.").
+			replace("července","7.").replace("červenec","7.").
+			replace("června","6.").replace("červen","6.").
+			replace("srpna","8.").replace("srpen","8.").
+			replace("září","9.").
+			replace("října","10.").replace("říjen","10.").
+			replace("listopadu","11.").replace("listopad","11.").
+			replace("prosince","12.").replace("prosinec","12.").strip().
+			replace(/^(\-?[0-9]{3,4} )/,"$1-").replace(" ","").replace(/\.$/,"").replace(".","-").
+			replace(/^(\-?)([0-9]{3}($|\-))/,"$10$2").replace(/\-([0-9]\-)/,"\-0$1").replace(/\-([0-9]$)/,"\-0$1"),
+		part3,if(isError(part3),"",part3))
+	].join(",").split(','), a, filter(a, v, v.length() == forEach(a, x, x.length()).sort()[-1]))[0],
+final,if( diff((final.toDate('yyyy-MM-dd')), ("1582-10-15".toDate('yyyy-MM-dd')), "days")<0,final+"_Q1985786",final)
+)
 ```
 
 ### 370ab,678a (Place of birth)
