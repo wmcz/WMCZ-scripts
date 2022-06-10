@@ -465,21 +465,28 @@ The task is not trivial in GREL, so Python (also natively supported by OpenRefin
 Be sure to also change the paths to files in the script.
 
 ```
+string = cells['678a'].value.lower()
+with open(r"D:\USERS_ANALYSIS\Vojta Dostal\Downloads/povolani.csv",'r') as g:
+ for name in g:
+   original = name.decode('utf8').split(";")[2]
+   new = name.decode('utf8').split(";")[0]
+   string = string.replace(original.strip(),new.strip())
+
 stopwords = {}
 stopwords2 = {}
 
-with open(r"/Users/vojte\Documents/povolani.csv",'r') as f:
+with open(r"D:\USERS_ANALYSIS\Vojta Dostal\Downloads/povolani.csv",'r') as f:
  for name in f:
   stopwords[name.decode('utf8').split(";")[0]] = name.rstrip().split(";")[1]
 
-with open(r"/Users/vojte\Documents/povolani2.csv",'r') as g:
+with open(r"D:\USERS_ANALYSIS\Vojta Dostal\Downloads/povolani2.csv",'r') as g:
  for name in g:
   stopwords2[name.decode('utf8').split(";")[0]] = name.rstrip().split(";")[1]
   
 add = []
 
 try:
- for x in cells['678a'].value.replace(',',' ').replace('.',' ').split(' '):
+ for x in string.replace(',',' ').replace('.',' ').split(' '):
   if x.lower() in stopwords:
    add.append(stopwords[x.lower()])
 except KeyError:
