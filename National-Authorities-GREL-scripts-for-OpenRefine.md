@@ -54,6 +54,7 @@ Create new column "pseudonyms"
 forEach(filter(cells['500ia7'].value.split("|"),v,contains(v,/Pseudonym\:.*/)),v,v.match(/.*?Pseudonym\:\$[^\$]+\$(.*?)$/)[0]).join(',')
 
 ```
+Before continuing to (2), split multi-valued cells.
 
 2) exclude pseudonym rows from import:
 
