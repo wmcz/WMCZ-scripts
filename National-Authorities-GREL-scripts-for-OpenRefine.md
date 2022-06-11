@@ -4,7 +4,7 @@ This document was assembled over the course of several months of 2022, primarily
 
 The workflow uses <a href="https://github.com/LibreCat/Catmandu-MARC">Catmandu MARC scripts</a>, which enabled us to extract information from MARC XML dumps published by the National Library. Specifically, we used a custom Docker image of Catmandu kindly <a href="https://github.com/svkpk/catmandu-custom-docker">published</a> by the <a href="https://svkpk.cz/en/">Education and Research Library of Pilsener Region</a>. Then the dataset was loaded into OpenRefine and processed (transformed and linked) with GREL or Python scripts. Whenever external files are needed for this, a link to the file is provided. The jobs can be run on a personal computer with adequare RAM, but a full authority dataset may be too large for the processing power of PC, especially when extracting occupations from descriptions.
 
-The provided scripts mostly center on personal authority files, but some may be used for corporate or subject (eg. geographical) subject lines. You are invited to contribute further scripts for other MARC fields present in the Czech authority files.
+The provided scripts mostly center on personal authority files, but some may be used for corporate or subject (eg. geographical) files as well. You are invited to contribute further scripts for other MARC fields present in the Czech authority files.
 
 ### Contents
 
