@@ -1,54 +1,30 @@
-- [GREL scripts and corresponding Catmandu calls for extraction of Wikidata-ready data from Czech National Authority files](#grel-scripts-and-corresponding-catmandu-calls-for-extraction-of-wikidata-ready-data-from-czech-national-authority-files)
-  * [100abq,500ia7 (Pseudonyms)](#100abq-500ia7--pseudonyms-)
-    + [Catmandu](#catmandu)
-    + [GREL to exclude pseudonym entries from import](#grel-to-exclude-pseudonym-entries-from-import)
-    + [GREL to add pseudonyms of each item as authority IDs](#grel-to-add-pseudonyms-of-each-item-as-authority-ids)
-  * [100abq,678a (Czech description)](#100abq-678a--czech-description-)
-    + [Catmandu](#catmandu-1)
-    + [Python](#python)
-  * [100abq (Personal name)](#100abq--personal-name-)
-    + [Catmandu](#catmandu-2)
-    + [GREL](#grel)
-  * [100abq,[gender] (Birth name)](#100abq--gender---birth-name-)
-    + [Catmandu](#catmandu-3)
-    + [Required datafiles](#required-datafiles)
-    + [GREL](#grel-1)
-  * [100a (Surname)](#100a--surname-)
-    + [Catmandu](#catmandu-4)
-    + [Required datafiles](#required-datafiles-1)
-    + [GREL](#grel-2)
-  * [100d,046f,678a (Date of birth)](#100d-046f-678a--date-of-birth-)
-    + [Catmandu](#catmandu-5)
-    + [GREL](#grel-3)
-  * [100d,046g,678a (Date of death)](#100d-046g-678a--date-of-death-)
-    + [Catmandu](#catmandu-6)
-    + [GREL](#grel-4)
-  * [370ab,678a (Place of birth)](#370ab-678a--place-of-birth-)
-    + [Catmandu](#catmandu-7)
-    + [Required datafiles](#required-datafiles-2)
-    + [GREL](#grel-5)
-  * [370ab,678a (Place of death)](#370ab-678a--place-of-death-)
-    + [Catmandu](#catmandu-8)
-    + [Required datafiles](#required-datafiles-3)
-    + [GREL](#grel-6)
-  * [374a,678a (Occupation)](#374a-678a--occupation-)
-    + [Catmandu](#catmandu-9)
-    + [Required datafiles](#required-datafiles-4)
-    + [Python](#python-1)
-  * [375a,678a (Sex/gender)](#375a-678a--sex-gender-)
-    + [Catmandu](#catmandu-10)
-    + [GREL](#grel-7)
-  * [377a (Languages written)](#377a--languages-written-)
-    + [Catmandu](#catmandu-11)
-    + [Required datafiles](#required-datafiles-5)
-    + [GREL](#grel-8)
+### Introduction
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+This document was assembled over the course of several months of 2022, primarily by Vojtěch Dostál of <a href="https://github.com/wmcz">Wikimedia Czech Republic</a>, and summarizes the work done on extraction, transformation, linking and loading of the <a href="https://aleph.nkp.cz/F/?func=file&file_name=find-a&local_base=aut">National Authorities dataset</a> of the <a href="https://www.nkp.cz"> National Library of the Czech Republic, which was <a href="https://www.nkp.cz/o-knihovne/odborne-cinnosti/otevrena-data">published as open data</a> under the CC-0 license. The project was financially supported from a 2022 VISK grant by the Ministry of Culture of the Czech Republic.
 
-* Catmandu script = to extract information from MARC XML dumps
-* OpenRefine GREL or Python code = to transform values for Wikidata
+The workflow uses <a href="https://github.com/LibreCat/Catmandu-MARC">Catmandu MARC scripts</a>, which enabled us to extract information from MARC XML dumps published by the National Library. Specifically, we used a custom Docker image of Catmandu kindly <a href="https://github.com/svkpk/catmandu-custom-docker">published</a> by the <a href="https://svkpk.cz/en/">Education and Research Library of Pilsener Region</a>. Then the dataset was loaded into OpenRefine and processed (transformed and linked) with GREL or Python scripts. Whenever external files are needed for this, a link to the file is provided. The jobs can be run on a personal computer with adequare RAM, but a full authority dataset may be too large for the processing power of PC, especially when extracting occupations from descriptions.
 
-### 100abq,500ia7 (Pseudonyms)
+The provided scripts mostly center on personal authority files, but some may be used for corporate or subject (eg. geographical) subject lines. You are invited to contribute further scripts for other MARC fields present in the Czech authority files.
+
+### Contents
+
+- [100abq 500ia7 - Pseudonyms](#100abq-500ia7---pseudonyms)
+- [100abq 678a - Czech description](#100abq-678a---czech-description)
+- [100abq - Personal name](#100abq---personal-name)
+- [100abq gender - Birth name](#100abq-gender---birth-name)
+- [100a - Surname](#100a---surname)
+- [100d 046f 678a - Date of birth](#100d-046f-678a---date-of-birth)
+- [100d 046g 678a - Date of death](#100d-046g-678a---date-of-death)
+- [370ab 678a - Place of birth](#370ab-678a---place-of-birth)
+- [370ab 678a - Place of death](#370ab-678a---place-of-death)
+- [374a 678a - Occupation](#374a-678a---occupation)
+- [375a 678a - Sex or gender](#375a-678a---sex-or-gender)
+- [377a - Languages written](#377a---languages-written)
+- [024 - ORCID ISNI Wikidata QID](#024---orcid-isni-wikidata-qid)
+
+<small><i>Table of contents generated with <a href='http://ecotrust-canada.github.io/markdown-toc/'>markdown-toc</a></i></small>
+
+### 100abq 500ia7 - Pseudonyms
 Czech authority files handle pseudonyms as separate entries while Wikidata keep them generally in one item.
 #### Catmandu
 
@@ -91,7 +67,7 @@ with(cells['_id'].value.cross('','pseudonyms').cells['pseudonyms'].value[0],find
 forEach(filter(cells['500ia7'].value.split("|"),v,contains(v,/Pseudonym\:.*/)),v,v.split("$").slice(1,3).reverse().join("$").chomp(",")).join("|")
 ```
 
-### 100abq,678a (Czech description)
+### 100abq 678a - Czech description
 
 #### Catmandu
 
@@ -130,7 +106,7 @@ else:
 return f
 ```
 
-### 100abq (Personal name)
+### 100abq - Personal name
 
 #### Catmandu
 
@@ -162,7 +138,7 @@ end
 	)).replace(">>","").replace("<<","")
 ```
 
-### 100abq,[gender] (Birth name)
+### 100abq gender - Birth name
 
 #### Catmandu
 See personal name. You will also need a column with gender, if known (See section "Sex/gender")
@@ -188,7 +164,7 @@ forEach(
 	).toString().replace(/[\[\] ]/,"")
 ```
 
-### 100a (Surname)
+### 100a - Surname
 
 #### Catmandu
 See section related to birth name.
@@ -209,7 +185,7 @@ forEach(
 	strip(surname).cross('surnames','label').cells['surname'].value[0]).join(",")
 ```
 
-### 100d,046f,678a (Date of birth)
+### 100d 046f 678a - Date of birth
 
 #### Catmandu
 
@@ -286,7 +262,7 @@ final,if( diff((final.toDate('yyyy-MM-dd')), ("1582-10-15".toDate('yyyy-MM-dd'))
 )
 ```
 
-### 100d,046g,678a (Date of death)
+### 100d 046g 678a - Date of death
 #### Catmandu
 
 `catmandu convert MARC --type XML --fix data/100d,046fg,678a.fix to CSV --fields "_id,100d,046f,046g,678a" < data/aut.xml > data/output.csv`
@@ -360,7 +336,7 @@ final,if( diff((final.toDate('yyyy-MM-dd')), ("1582-10-15".toDate('yyyy-MM-dd'))
 )
 ```
 
-### 370ab,678a (Place of birth)
+### 370ab 678a - Place of birth
 #### Catmandu
 
 `catmandu convert MARC --type XML --fix data/370ab,678a.fix to CSV --fields "_id,370a,370b,678a" < data/aut.xml > data/output.csv`
@@ -400,7 +376,7 @@ coalesce(
 )
 ```
 
-### 370ab,678a (Place of death)
+### 370ab 678a - Place of death
 
 #### Catmandu
 See section: place of birth.
@@ -437,7 +413,7 @@ coalesce(
 )
 ```
 
-### 374a,678a (Occupation)
+### 374a 678a - Occupation
 
 #### Catmandu
 
@@ -507,7 +483,7 @@ joined = ",".join(result)
 return joined 
 ```
 
-### 375a,678a (Sex/gender)
+### 375a 678a - Sex or gender
 
 #### Catmandu
 `catmandu convert MARC --type XML --fix data/375a.fix to CSV --fields "_id,375a,678a" < data/aut.xml > data/output.csv`
@@ -546,7 +522,7 @@ with(cells['375a'].value,
 		)
 )
 ```
-### 377a (Languages written)
+### 377a - Languages written
 
 #### Catmandu
 `catmandu convert MARC --type XML --fix data/377a.fix to CSV --fields "_id,377a" < data/aut.xml > data/output.csv`
@@ -574,7 +550,7 @@ forEach(
 	v.cross('jazyky','kod').cells['item'].value[0]).join(",")
 ```
 
-### 024 (ORCID, ISNI, Wikidata QID)
+### 024 - ORCID ISNI Wikidata QID
 
 #### Catmandu
 `catmandu convert MARC --type XML --fix data/024.fix to CSV --fields "_id,024a2" < data/aut.xml > data/output.csv`
