@@ -6,6 +6,9 @@ The workflow uses <a href="https://github.com/LibreCat/Catmandu-MARC">Catmandu M
 
 The provided scripts mostly center on personal authority files, but some may be used for corporate or subject (eg. geographical) files as well. You are invited to contribute further scripts for other MARC fields present in the Czech authority files.
 
+### To-do list for later
+* Detect sourcing circumstances for dates ("asi") and add as qualifiers (https://www.wikidata.org/wiki/Property:P1480)
+	
 ### Contents
 
 - [100abq 500ia7 - Pseudonyms](#100abq-500ia7---pseudonyms)
