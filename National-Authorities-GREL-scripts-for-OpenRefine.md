@@ -8,6 +8,8 @@ The provided scripts mostly center on personal authority files, but some may be 
 
 ### To-do list for later
 * Detect sourcing circumstances for dates ("asi") and add as qualifiers (https://www.wikidata.org/wiki/Property:P1480)
+* Detect 372a as field of work (P101)
+* Detect "činný/á" and add as P1317
 	
 ### Contents
 
