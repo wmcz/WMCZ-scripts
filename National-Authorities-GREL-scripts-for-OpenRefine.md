@@ -316,9 +316,14 @@ with(
 			split(".").reverse().join("-"),
 		part2,if(isError(part2),"",part2))
 		,
-		with(with(cells['100d'].value.match(/.*?\-([0-9]{3,4} ?(leden|únor|březen|duben|květen|duben|červenec|červen|srpen|září|říjen|listopad|prosinec)? ?[0-9]{0,2}\.?) ?(př\. Kr\.)?.*/),
+		with(with(cells['100d'].value.match(/(.*?)\-([0-9]{3,4} ?(leden|únor|březen|duben|květen|duben|červenec|červen|srpen|září|říjen|listopad|prosinec)? ?[0-9]{0,2}\.?) ?(př\. Kr\.)?.*/),
 					fulldate,
-					if(fulldate.inArray("př. Kr."),("-" + fulldate[0]).replace("--","-"),fulldate[0])
+					if(isNotNull(fulldate[0].match(/(činn[ýá]).*?/)[0]),
+							"",
+							if(fulldate.inArray("př. Kr."),
+								("-" + fulldate[1]).replace("--","-"),
+								fulldate[1])
+							)
 					).
 			replace("ledna","1.").replace("leden","1.").
 			replace("února","2.").replace("únor","2.").
