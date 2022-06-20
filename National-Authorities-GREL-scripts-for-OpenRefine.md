@@ -14,7 +14,7 @@ The provided scripts mostly center on personal authority files, but some may be 
 	
 ### Contents
 
-- [100abq 500ia7 - Pseudonyms](#100abq-500ia7---pseudonyms)
+- [100abq 500ia7 400ia - Pseudonyms and other names](#100abq-500ia7-400ia---pseudonyms-and-other-names)
 - [100abq 678a - Czech description](#100abq-678a---czech-description)
 - [100abq - Personal name](#100abq---personal-name)
 - [100abq gender - Birth name](#100abq-gender---birth-name)
@@ -30,11 +30,11 @@ The provided scripts mostly center on personal authority files, but some may be 
 
 <small><i>Table of contents generated with <a href='http://ecotrust-canada.github.io/markdown-toc/'>markdown-toc</a></i></small>
 
-### 100abq 500ia7 - Pseudonyms
+### 100abq 500ia7 400ia - Pseudonyms and other names
 Czech authority files handle pseudonyms as separate entries while Wikidata keep them generally in one item.
 #### Catmandu
 
-`catmandu convert MARC --type XML --fix data/100abq,500ia7.fix to CSV --fields "_id,100a,100b,100q,500ia7" < data/aut.xml > data/output.csv`
+`catmandu convert MARC --type XML --fix data/100abq,500ia7,400ia.fix to CSV --fields "_id,100a,100b,100q,500ia7,400ia" < data/aut.xml > data/output.csv`
 
 fix:
 
@@ -44,10 +44,12 @@ do marc_each()
   marc_map(100b,100b)
   marc_map(100q,100q)
   marc_map(500ia7,500ia7.$append,join:"$") 
+  marc_map(400ia,400ia.$append,join:"$") 
   
 end
 
 join_field(500ia7,'|')
+join_field(400ia,'|')
 ```
 
 #### GREL to exclude pseudonym entries from import
