@@ -380,7 +380,39 @@ with(
 final,if( diff((final.toDate('yyyy-MM-dd')), ("1582-10-15".toDate('yyyy-MM-dd')), "days")<0,final+"_Q1985786",final)
 )
 ```
-
+												   
+#### Extract sourcing circumstances for death date in 100d ("circa")
+												   
+Make sure that your column with extracted death date is named "death date"!
+												   
+```
+with(with(
+			cells['100d'].value.match(/^.*?\-(asi)? ([0-9]{3,4} ?(leden|únor|březen|duben|květen|duben|červenec|červen|srpen|září|říjen|listopad|prosinec)? ?[0-9]{0,2}\.?) ?(př\. Kr\.)? ?\-?.*/),
+			fulldate,
+				if(fulldate[0] == "asi",
+					if(fulldate.inArray("př. Kr."),("-" + fulldate[1]).replace("--","-"),fulldate[1])
+				,"")).
+			replace("ledna","1.").replace("leden","1.").
+			replace("února","2.").replace("únor","2.").
+			replace("března","3.").replace("březen","3.").
+			replace("dubna","4.").replace("duben","4.").
+			replace("května","5.").replace("květen","5.").
+			replace("července","7.").replace("červenec","7.").
+			replace("června","6.").replace("červen","6.").
+			replace("srpna","8.").replace("srpen","8.").
+			replace("září","9.").
+			replace("října","10.").replace("říjen","10.").
+			replace("listopadu","11.").replace("listopad","11.").
+			replace("prosince","12.").replace("prosinec","12.").strip().
+			replace(/^(\-?[0-9]{3,4} )/,"$1-").replace(" ","").replace(/\.$/,"").replace(".","-").
+			replace(/^(\-?)([0-9]{3}($|\-))/,"$10$2").replace(/\-([0-9]\-)/,"\-0$1").replace(/\-([0-9]$)/,"\-0$1"),
+		result_asi,
+			if(isError(result_asi),"",
+				if(result_asi == cells['death date'].value.split("_")[0],"Q5727902","")
+			)
+)											   
+```
+												   
 ### 370ab 678a - Place of birth
 #### Catmandu
 
