@@ -76,6 +76,40 @@ with(cells['_id'].value.cross('','pseudonyms').cells['pseudonyms'].value[0],find
 forEach(filter(cells['500ia7'].value.split("|"),v,contains(v,/Pseudonym\:.*/)),v,v.split("$").slice(1,3).reverse().join("$").chomp(",")).join("|")
 ```
 
+#### GREL to add pseudonyms of each item as aliases or pseudonyms (P742)
+
+```
+forEach(
+(
+	if(isBlank(cells['500ia7'].value),"",
+		forEach(
+				filter(cells['500ia7'].value.split("|"),
+				v,
+				contains(v,/Pseudonym\:.*/)),
+					v,
+					v.split("$").get(1).chomp(",")).join("|")
+	)
+		+"|"+
+	if(isBlank(cells['400ia'].value),"",
+		forEach(
+				filter(cells['400ia'].value.split("|"),
+				v,
+				contains(v,/Pseudonym\:.*/)),
+					v,
+					v.split("$").get(1).chomp(",")).join("|")
+	)
+).chomp("|").split("|"),
+v,
+	if(v.chomp(",").split(",").length() == 3,
+		v.chomp(",").split(",").get(1).strip() + " " + v.chomp(",").split(",").get(2).strip() + " " + v.chomp(",").split(",").get(0).strip(),
+		if(v.chomp(",").split(",").length() == 2,
+			v.chomp(",").split(",").get(1).strip() + " " + v.chomp(",").split(",").get(0).strip(),
+			v.chomp(",").strip()
+			)
+		)
+	).join("|")	
+```
+	
 ### 100abq 678a - Czech description
 
 #### Catmandu
