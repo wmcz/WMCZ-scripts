@@ -108,6 +108,7 @@ v,
 		)
 	).join("|")	
 ```
+Same for birth names (P1477), just replace occurences of "Pseudonym" in the script with "Rodné jméno".
 	
 ### 100abq 678a - Czech description
 
