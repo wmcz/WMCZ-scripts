@@ -7,7 +7,6 @@ The workflow uses <a href="https://github.com/LibreCat/Catmandu-MARC">Catmandu M
 The provided scripts mostly center on personal authority files, but some may be used for corporate or subject (eg. geographical) files as well. You are invited to contribute further scripts for other MARC fields present in the Czech authority files.
 
 ### To-do list for later
-* Add pseudonyms as P742
 * Detect 372a as field of work (P101)
 * Detect "činný/á" and add as P2031 and P2032
 * Add 370f (work location)
