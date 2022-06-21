@@ -109,7 +109,7 @@ v,
 		)
 	).join("|")	
 ```
-Same for birth names (P1477) or married names (P2562), just replace occurences of "Pseudonym" in the script with "Rodné jméno" or "Jméno získané sňatkem".
+Same for birth names including names of people before they accepted a church name (both P1477) or married names (P2562), just replace occurences of "Pseudonym" in the script with "Rodné jméno", "Světské jméno" or "Jméno získané sňatkem". Aliases can also be inserted from unspecified fields 400a (without subfield "i"). 
 	
 ### 100abq 678a - Czech description
 
