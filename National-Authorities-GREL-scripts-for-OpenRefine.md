@@ -108,7 +108,7 @@ v,
 		)
 	).join("|")	
 ```
-Same for birth names (P1477), just replace occurences of "Pseudonym" in the script with "Rodné jméno".
+Same for birth names (P1477) or married names (P2562), just replace occurences of "Pseudonym" in the script with "Rodné jméno" or "Jméno získané sňatkem".
 	
 ### 100abq 678a - Czech description
 
