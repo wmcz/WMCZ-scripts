@@ -10,6 +10,7 @@ The provided scripts mostly center on personal authority files, but some may be 
 * Detect 372a as field of work (P101)
 * Detect "činný/á" and add as P2031 and P2032
 * Add 370f (work location)
+* Assign correct first name and surname to people with pseudonyms which have their "real name" in 400a
 * Do not exclude pseudonym authorities which do not have a corresponding "real-name" authority.
 	
 ### Contents
