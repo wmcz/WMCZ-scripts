@@ -24,6 +24,7 @@ The provided scripts mostly center on personal authority files, but some may be 
 - [100d 046g 678a - Date of death](#100d-046g-678a---date-of-death)
 - [370ab 678a - Place of birth](#370ab-678a---place-of-birth)
 - [370ab 678a - Place of death](#370ab-678a---place-of-death)
+- [370f - Work location](#370f---work-location)
 - [374a 678a - Occupation](#374a-678a---occupation)
 - [375a 678a - Sex or gender](#375a-678a---sex-or-gender)
 - [377a - Languages written](#377a---languages-written)
@@ -545,6 +546,30 @@ coalesce(
 )
 ```
 
+### 370f - Work location
+#### Catmandu
+`catmandu convert MARC --type XML --fix data/370f.fix to CSV --fields "_id,370f" < data/aut.xml > data/output.csv`
+
+fix:
+```
+do marc_each()
+  marc_map(370f,370f.$append,join:"$")
+end
+join_field(370f,'|')
+```	
+#### Required datafiles
+See section: place of birth.
+
+#### GREL
+	
+```
+forEach(cells['370f'].value.replace("|","$").split("$"),
+	v,
+	((v.match(/(^.*?)\, (.*)$/).join(" (") + ")").cross('geoauthorities','151a').cells['_id'].value[0]).cross('NKCR-QID convert table','nkcr').cells['item'].value[0]
+	)
+		
+```
+	
 ### 374a 678a - Occupation
 
 #### Catmandu
