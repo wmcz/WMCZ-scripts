@@ -109,7 +109,25 @@ v,
 		)
 	).join("|")	
 ```
-Same for birth names including names of people before they accepted a church name (both P1477) or married names (P2562), just replace occurences of "Pseudonym" in the script with "Rodné jméno", "Světské jméno" or "Jméno získané sňatkem". Aliases can also be inserted from unspecified fields 400a (without subfield "i"). 
+Same for birth names including names of people before they accepted a church name (both P1477) or married names (P2562), just replace occurences of "Pseudonym" in the script with "Rodné jméno", "Světské jméno" or "Jméno získané sňatkem".
+	
+Aliases can also be inserted from unspecified fields 400a (without subfield "i"):
+	
+```	
+forEach(
+with(cells['400ia'].value.split("|"),
+    v,
+    forEach(v,part,if(contains(part,"$"),"",part.replace(">>","").replace("<<","")))
+),v,
+if(v.chomp(",").split(",").length() == 3,
+		v.chomp(",").split(",").get(1).strip() + " " + v.chomp(",").split(",").get(2).strip() + " " + v.chomp(",").split(",").get(0).strip(),
+		if(v.chomp(",").split(",").length() == 2,
+			v.chomp(",").split(",").get(1).strip() + " " + v.chomp(",").split(",").get(0).strip(),
+			v.chomp(",").strip()
+			)
+		)
+).join("|")
+```
 	
 ### 100abq 678a - Czech description
 
