@@ -563,11 +563,14 @@ See section: place of birth.
 #### GREL
 	
 ```
-forEach(cells['370f'].value.replace("|","$").split("$"),
-	v,
-	((v.match(/(^.*?)\, (.*)$/).join(" (") + ")").cross('geoauthorities','151a').cells['_id'].value[0]).cross('NKCR-QID convert table','nkcr').cells['item'].value[0]
-	)
-		
+(forEach(cells['370f'].value.replace("|","$").split("$"),
+		v,
+		if(v.contains(", "),
+			v.match(/(^.*?)\, (.*)$/).join(" (") + ")",
+			v
+			).cross('geoauthorities','151a').cells['_id'].value[0].cross('NKCR-QID convert table','nkcr').cells['item'].value[0]
+		)
+	).join("|")
 ```
 	
 ### 374a 678a - Occupation
