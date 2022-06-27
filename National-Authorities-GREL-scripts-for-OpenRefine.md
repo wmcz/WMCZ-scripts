@@ -247,6 +247,25 @@ forEach(
 	surname,
 	strip(surname).cross('surnames','label').cells['surname'].value[0]).join(",")
 ```
+	
+To extract surnames from real names (400ia), you'll need the 400ia field in your Catmandu call and the following GREL in OpenRefine:
+
+```
+forEach(
+	forEach(
+		filter(
+			cells['400ia'].value.split("|"),
+			v,
+			contains(v,/Skutečné jméno\:.*/)
+			),
+		v,
+		v.split("$").get(1).chomp(",")
+	)[0].split(", ")[0].trim().split("-"),
+surname,
+strip(surname).cross('surnames','label').cells['surname'].value[0]).join(",")
+)
+
+```
 
 ### 100d 046f 678a - Date of birth
 
