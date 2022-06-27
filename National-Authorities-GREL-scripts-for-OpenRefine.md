@@ -8,7 +8,6 @@ The provided scripts mostly center on personal authority files, but some may be 
 
 ### To-do list for later
 * Detect 372a as field of work (P101)
-* Detect "činný/á" and add as P2031 and P2032
 * Do not exclude pseudonym authorities which do not have a corresponding "real-name" authority.
 	
 ### Contents
@@ -20,6 +19,7 @@ The provided scripts mostly center on personal authority files, but some may be 
 - [100a - Surname](#100a---surname)
 - [100d 046f 678a - Date of birth](#100d-046f-678a---date-of-birth)
 - [100d 046g 678a - Date of death](#100d-046g-678a---date-of-death)
+- [100d - Floruit](#100d---floruit)
 - [370ab 678a - Place of birth](#370ab-678a---place-of-birth)
 - [370ab 678a - Place of death](#370ab-678a---place-of-death)
 - [370f - Work location](#370f---work-location)
@@ -485,7 +485,34 @@ with(with(
 			)
 )											   
 ```
+
+### 100d - Floruit
+To add as P1317, P2031 or P2032
 												   
+#### Catmandu
+See date of birth/death for 100d.
+#### GREL
+												   
+```
+with(cells['100d'].value.match(/činn[ýá] (.*)/)[0],
+	v,
+	if(v.contains("-"),
+		forEach(v.split("-"),
+			date,
+			if(isBlank(date.match(/(.*?) ?(př\. Kr\.)?/)[1]),
+				date.match(/(.*?) ?(př\. Kr\.)?/)[0],
+				"-"+date.match(/(.*?) ?(př\. Kr\.)?/)[0])
+			.replace(". století","00C").chomp(".").match(/(\-?[0-9]{3,4}C?)/)[0]
+			).join("|")
+		,
+		if(isBlank(v.match(/(.*?) ?(př\. Kr\.)?/)[1]),
+				v.match(/(.*?) ?(př\. Kr\.)?/)[0],
+				"-"+v.match(/(.*?) ?(př\. Kr\.)?/)[0])
+			.replace(". století","00C").chomp(".").match(/(\-?[0-9]{3,4}C?)/)[0]
+		)
+	)
+```
+
 ### 370ab 678a - Place of birth
 #### Catmandu
 
