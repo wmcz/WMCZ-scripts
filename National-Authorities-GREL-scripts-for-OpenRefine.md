@@ -9,7 +9,8 @@ The provided scripts mostly center on personal authority files, but some may be 
 ### To-do list for later
 * Detect 372a as field of work (P101)
 * Do not exclude pseudonym authorities which do not have a corresponding "real-name" authority.
-	
+* Detect 370g as "lower administrative unit" of 370f.
+
 ### Contents
 
 - [100abq 500ia7 400ia - Pseudonyms and other names](#100abq-500ia7-400ia---pseudonyms-and-other-names)
